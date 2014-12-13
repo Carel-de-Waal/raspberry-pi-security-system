@@ -1,0 +1,26 @@
+auto lo
+iface lo inet loopback
+
+#auto eth0
+#iface eth0 inet dhcp
+
+auto wlan0
+iface wlan0 inet manual
+wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf
+
+#allow-hotplug wlan0
+#iface wlan0 inet manual
+
+
+iface cdw inet static
+address 192.168.10.90
+gateway 192.168.10.1
+netmask 255.255.255.0
+dns-nameservers 192.168.10.1
+
+
+#wpa-ssid DontEventTry
+#wpa-ap-scan 1
+#wpa-key-mgmt WPA-PSK
+#wpa-psk 1df55a9f36f6123390e563e398d1e1687f9d897a9fa02b7257be42e8a9d4469e
+#wpa-psk nadia2381
