@@ -24,9 +24,31 @@ def isrFOB01(channel):
 #An interrupt is called when PIR01 is triggered
 def isrPIR01(channel):
 	if isArmed():
+		updateStatus('PIR01','1')
 		initSiren()
+		updateStatus('PIR01','0')
 	else:
+		updateStatus('PIR01','1')
 		print "PIR01 triggered but alarm is disarmed"
+		sleep(2)
+		updateStatus('PIR01','0')
+
+#An interrupt is called when PIR01 is triggered
+def isrPIR02(channel):
+	if isArmed():
+		updateStatus('PIR02','1')
+		initSiren()
+		updateStatus('PIR02','0')
+	else:
+		updateStatus('PIR02','1')
+		print "PIR02 triggered but alarm is disarmed"
+		sleep(2)
+		updateStatus('PIR02','0')
+
+def updateStatus(filename, state):
+	f = open(filename,'w')
+	f.write(state)
+	f.close()
 
 #Check wheter alarm is currently armed
 def isArmed():
@@ -37,6 +59,7 @@ def isArmed():
 		return False;
 	else:
 		return True;
+
 #Arm the system 
 def arm():
 	print "Alarm Status - ***ARMED***"
@@ -58,6 +81,7 @@ def disarm():
 #Initiate Siren activation sequence
 def initSiren():
 	GPIO.remove_event_detect(PORT_PIR01)
+	GPIO.remove_event_detect(PORT_PIR02)
 	#Give a warning siren
 	sirenWarn()
 	print "Wait 5 seconds"
@@ -65,7 +89,8 @@ def initSiren():
 	#Check if still armed
 	if isArmed() is False:
 		print "Siren sequence stopped"
-		GPIO.add_event_detect(PORT_PIR01,GPIO.FALLING, callback=isrPIR01 , bouncetime=3000)
+		GPIO.add_event_detect(PORT_PIR01,GPIO.FALLING, callback=isrPIR01 , bouncetime=1000)
+		GPIO.add_event_detect(PORT_PIR02,GPIO.FALLING, callback=isrPIR02 , bouncetime=1000)
 		return
 	else:
 		print "Siren still armed"
@@ -74,13 +99,14 @@ def initSiren():
 	#Check if still armed
 	if isArmed() is False:
 		print "Siren sequence stopped"
-		GPIO.add_event_detect(PORT_PIR01,GPIO.FALLING, callback=isrPIR01 , bouncetime=3000)
+		GPIO.add_event_detect(PORT_PIR01,GPIO.FALLING, callback=isrPIR01 , bouncetime=1000)
+		GPIO.add_event_detect(PORT_PIR02,GPIO.FALLING, callback=isrPIR02 , bouncetime=1000)
 		return
 	else:
 		print "Siren still armed"
 	sirenActivate()
-	GPIO.add_event_detect(PORT_PIR01,GPIO.FALLING, callback=isrPIR01 , bouncetime=3000)
-
+	GPIO.add_event_detect(PORT_PIR01,GPIO.FALLING, callback=isrPIR01 , bouncetime=1000)
+	GPIO.add_event_detect(PORT_PIR02,GPIO.FALLING, callback=isrPIR02 , bouncetime=1000)
 
 #Give a warning beep on Siren
 def sirenWarn():
@@ -115,11 +141,13 @@ GPIO.setmode(GPIO.BOARD)
 
 GPIO.setup(PORT_FOB01 , GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(PORT_PIR01 , GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(PORT_PIR02 , GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(PORT_SIREN01 , GPIO.OUT)
 
 #Setup callback when pin 
-GPIO.add_event_detect(PORT_FOB01,GPIO.FALLING, callback=isrFOB01 , bouncetime=3000)
-GPIO.add_event_detect(PORT_PIR01,GPIO.FALLING, callback=isrPIR01 , bouncetime=3000)
+GPIO.add_event_detect(PORT_FOB01,GPIO.FALLING, callback=isrFOB01 , bouncetime=1000)
+GPIO.add_event_detect(PORT_PIR01,GPIO.FALLING, callback=isrPIR01 , bouncetime=1000)
+GPIO.add_event_detect(PORT_PIR02,GPIO.FALLING, callback=isrPIR02 , bouncetime=1000)
 
 while True:
 	try:
@@ -127,6 +155,7 @@ while True:
 		sleep(300)
 	except KeyboardInterrupt:
 		print "Cleanup and exit", sys.exc_info()[0]
-		GPIO.output(PORT_SIREN01,0)
+		#GPIO.output(PORT_SIREN01,0)
 		GPIO.cleanup()
-		
+		break
+#		sys.exit()
