@@ -1,16 +1,16 @@
 #!/bin/bash
-# controller daemon
+# webserver daemon
 # chkconfig: 345 20 80
-# description: controller daemon
-# processname: controller
+# description: webserver daemon
+# processname: webserver
 
-DAEMON_PATH="/home/pi/git/raspberry-pi-security-system/python-gpio-controller/"
+DAEMON_PATH="/home/pi/git/raspberry-pi-security-system/python-webserver/"
 
-DAEMON="/usr/bin/python controller.py"
+DAEMON="/usr/bin/python server.py"
 DAEMONOPTS=""
 
-NAME=controller
-DESC="Alarm System Controller Daemon"
+NAME=webserver
+DESC="Webserver Daemon"
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 
@@ -18,7 +18,7 @@ case "$1" in
 start)
 	printf "%-50s" "Starting $NAME..."
 	cd $DAEMON_PATH
-	PID=`$DAEMON $DAEMONOPTS > /var/log/controller.log 2>&1 & echo $!`
+	PID=`$DAEMON $DAEMONOPTS >> /var/log/webserver.log 2>&1 & echo $!`
 	#echo "Saving PID" $PID " to " $PIDFILE
         if [ -z $PID ]; then
             printf "%s\n" "Fail"
