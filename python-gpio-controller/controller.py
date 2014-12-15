@@ -89,8 +89,8 @@ def initSiren():
 	#Check if still armed
 	if isArmed() is False:
 		print "Siren sequence stopped"
-		GPIO.add_event_detect(PORT_PIR01,GPIO.FALLING, callback=isrPIR01 , bouncetime=1000)
-		GPIO.add_event_detect(PORT_PIR02,GPIO.FALLING, callback=isrPIR02 , bouncetime=1000)
+		GPIO.add_event_detect(PORT_PIR01,GPIO.FALLING, callback=isrPIR01 , bouncetime=200)
+		GPIO.add_event_detect(PORT_PIR02,GPIO.FALLING, callback=isrPIR02 , bouncetime=200)
 		return
 	else:
 		print "Siren still armed"
@@ -99,14 +99,14 @@ def initSiren():
 	#Check if still armed
 	if isArmed() is False:
 		print "Siren sequence stopped"
-		GPIO.add_event_detect(PORT_PIR01,GPIO.FALLING, callback=isrPIR01 , bouncetime=1000)
-		GPIO.add_event_detect(PORT_PIR02,GPIO.FALLING, callback=isrPIR02 , bouncetime=1000)
+		GPIO.add_event_detect(PORT_PIR01,GPIO.FALLING, callback=isrPIR01 , bouncetime=200)
+		GPIO.add_event_detect(PORT_PIR02,GPIO.FALLING, callback=isrPIR02 , bouncetime=200)
 		return
 	else:
 		print "Siren still armed"
 	sirenActivate()
-	GPIO.add_event_detect(PORT_PIR01,GPIO.FALLING, callback=isrPIR01 , bouncetime=1000)
-	GPIO.add_event_detect(PORT_PIR02,GPIO.FALLING, callback=isrPIR02 , bouncetime=1000)
+	GPIO.add_event_detect(PORT_PIR01,GPIO.FALLING, callback=isrPIR01 , bouncetime=200)
+	GPIO.add_event_detect(PORT_PIR02,GPIO.FALLING, callback=isrPIR02 , bouncetime=200)
 
 #Give a warning beep on Siren
 def sirenWarn():
@@ -145,9 +145,9 @@ GPIO.setup(PORT_PIR02 , GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(PORT_SIREN01 , GPIO.OUT)
 
 #Setup callback when pin 
-GPIO.add_event_detect(PORT_FOB01,GPIO.FALLING, callback=isrFOB01 , bouncetime=1000)
-GPIO.add_event_detect(PORT_PIR01,GPIO.FALLING, callback=isrPIR01 , bouncetime=1000)
-GPIO.add_event_detect(PORT_PIR02,GPIO.FALLING, callback=isrPIR02 , bouncetime=1000)
+GPIO.add_event_detect(PORT_FOB01,GPIO.FALLING, callback=isrFOB01 , bouncetime=200)
+GPIO.add_event_detect(PORT_PIR01,GPIO.FALLING, callback=isrPIR01 , bouncetime=200)
+GPIO.add_event_detect(PORT_PIR02,GPIO.FALLING, callback=isrPIR02 , bouncetime=200)
 
 while True:
 	try:
